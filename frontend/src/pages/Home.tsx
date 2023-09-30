@@ -1,5 +1,5 @@
 const Home: React.FC = () => {
-return (<>Log in page</>)
+return (<>Home page</>)
 }
 
 export default Home;
