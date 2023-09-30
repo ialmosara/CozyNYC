@@ -2,6 +2,10 @@ import { useState } from "react";
 import {
   Box,
   Button,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  Grid,
   InputAdornment,
   Link,
   Modal,
@@ -41,43 +45,56 @@ const Login: React.FC = () => {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: 400,
+            width: 500,
             border: "2px solid #000",
             bgcolor: "background.paper",
             boxShadow: 24,
             pt: 2,
             px: 4,
             pb: 3,
+            borderRadius: "1px",
           }}
+          textAlign={"center"}
         >
           {page === "login" && (
             <>
               <Typography variant={"h4"}>Login</Typography>
-              <div>
-                <TextField
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <AccountCircle />
-                      </InputAdornment>
-                    ),
-                  }}
-                  required
-                  label={"Username"}
+              <TextField
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <AccountCircle />
+                    </InputAdornment>
+                  ),
+                }}
+                required
+                label={"Username"}
+                margin="normal"
+                fullWidth
+              />
+              <TextField
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Password />
+                    </InputAdornment>
+                  ),
+                }}
+                required
+                label={"Password"}
+                margin="normal"
+                fullWidth
+              />
+              <FormGroup row>
+                <FormControlLabel
+                  label="Remember Me?"
+                  labelPlacement="start"
+                  control={<Checkbox />}
                 />
-                <TextField
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Password />
-                      </InputAdornment>
-                    ),
-                  }}
-                  required
-                  label={"Password"}
-                />
-              </div>
-              <Typography display={"inline"}>Don't have an account?</Typography>
+              </FormGroup>
+              <Typography display={"inline"} align="center">
+                Don't have an account?
+              </Typography>
               <Link
                 component={"button"}
                 onClick={() => setPage("signup")}
@@ -87,7 +104,14 @@ const Login: React.FC = () => {
                 &nbsp; Sign Up
               </Link>
               <div>
-                <Button variant="contained">Log in</Button>
+                <Button
+                  variant="contained"
+                  sx={{
+                    borderRadius: "5px",
+                  }}
+                >
+                  Log in
+                </Button>
               </div>
             </>
           )}
@@ -104,6 +128,8 @@ const Login: React.FC = () => {
                 }}
                 required
                 label={"Username"}
+                margin="normal"
+                fullWidth
               />
               <TextField
                 required
@@ -115,6 +141,8 @@ const Login: React.FC = () => {
                     </InputAdornment>
                   ),
                 }}
+                margin="normal"
+                fullWidth
               />
               <TextField
                 InputProps={{
@@ -126,6 +154,8 @@ const Login: React.FC = () => {
                 }}
                 required
                 label={"Password"}
+                margin="normal"
+                fullWidth
               />
               <TextField
                 InputProps={{
@@ -134,23 +164,35 @@ const Login: React.FC = () => {
                       <Password />
                     </InputAdornment>
                   ),
-                  style: { min: 0, textAlign: 'center' }
+                  style: { textAlign: "center" },
                 }}
                 required
                 label={"Retype Password"}
+                margin="normal"
+                fullWidth
               />
-              <div>
-              <Typography display={"inline"}>Don't have an account?</Typography>
+              <Typography display={"inline"}>
+                Already have an account?
+              </Typography>
               <Link
                 component={"button"}
                 onClick={() => setPage("login")}
                 color={"#C4C4C4"}
                 variant={"body1"}
               >
-                &nbsp; login
+                &nbsp; Log in
               </Link>
+              <div>
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#F792BE",
+                    borderRadius: "5px",
+                  }}
+                >
+                  Create Account{" "}
+                </Button>
               </div>
-              <Button variant="contained">Create Account </Button>
             </>
           )}
         </Box>
