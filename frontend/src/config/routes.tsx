@@ -1,7 +1,7 @@
 import {
     createBrowserRouter,
   } from "react-router-dom";
-import Login from "../pages/SignIn";
+import Login from "../pages/LogIn";
 import Home from '../pages/Home';
 import Signup from "../pages/Signup";
 import StreamManager from "../pages/StreamManager";
@@ -13,17 +13,17 @@ export const routes = createBrowserRouter([
         Component: Home
     },
     {
-        path: '/login',
+        path: 'login',
         loader: () => ({ message: "Hello Login!" }),
         Component: Login
     },
     {
-        path: '/signup',
+        path: 'signup',
         loader: () => ({ message: "Hello Signup!" }),
         Component: Signup
     },
     {
-        path: '/streamManager',
+        path: 'streamManager',
         loader: () => ({ message: "Hello Stream Manager!" }),
         Component: StreamManager
     },
