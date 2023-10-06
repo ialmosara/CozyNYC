@@ -8,7 +8,20 @@ const Fallback = () => {
 };
 
 const App: React.FC = () => {
-  const theme = createTheme({});
+  const theme = createTheme({
+    palette: {
+      background: {
+        paper: "rgb(170,170,170)",
+      },
+    },
+    typography: {
+      fontFamily: "Montserrat",
+      fontWeightRegular: 800,
+      h4: {
+        textAlign: "center",
+      },
+    },
+  });
 
   return (
     <ThemeProvider theme={theme}>

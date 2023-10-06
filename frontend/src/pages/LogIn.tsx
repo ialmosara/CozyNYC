@@ -1,60 +1,89 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
   Checkbox,
+  Container,
   FormControlLabel,
   FormGroup,
-  Grid,
   InputAdornment,
   Link,
   Modal,
   TextField,
-  ThemeProvider,
   Typography,
-  createTheme,
 } from "@mui/material";
 import { AccountCircle, Email, Password } from "@mui/icons-material";
+import { ThemeProvider } from "@mui/material/styles";
+import { LoadingButton } from "@mui/lab";
+import { login, signup } from "../service/auth";
 
 const Login: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
   const [page, setPage] = useState<"login" | "signup">("login");
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const theme = createTheme({
-    palette: {
-      background: {
-        paper: "rgb(170,170,170)",
-      },
-    },
-    typography: {
-      fontFamily: "Montserrat",
-      fontWeightRegular: 800,
-      h4: {
-        textAlign: "center",
-      },
-    },
-  });
+  const formSubmitHelper = (e: React.FormEvent<HTMLFormElement>): FormData => {
+    setLoading(true);
+    e.preventDefault();
+    return new FormData(e.currentTarget);
+  };
+
+  const onLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    try {
+      const data = formSubmitHelper(e);
+      const reqBody: API.LoginBody = {
+        username: data.get("username") as string,
+        password: data.get("password") as string,
+        rememberMe: !!data.get("rememberMe"),
+      };
+      console.log("pre api call");
+      const test = await login(reqBody);
+      console.log("test", test);
+      console.log("successful api call");
+    } catch (e) {
+      console.log("failed api call");
+    }
+    setLoading(false);
+  };
+
+  const onSignup = async (e: React.FormEvent<HTMLFormElement>) => {
+    try {
+      const data = formSubmitHelper(e);
+      const reqBody: API.SignUpBody = {
+        username: data.get("username") as string,
+        email: data.get("email") as string,
+        password: data.get("password") as string,
+      };
+      const test = await signup(reqBody);
+      console.log("successful api call", test);
+    } catch (e) {
+      console.log("failed api call", e);
+    }
+    setLoading(false);
+  };
 
   return (
-    <ThemeProvider theme={theme}>
+    <Container>
       <Button onClick={() => setOpenModal(true)}> Log in </Button>
       <Modal open={openModal} onClose={() => setOpenModal(false)}>
         <Box
           sx={{
-            position: "absolute" as "absolute",
-            top: "50%",
-            left: "50%",
             transform: "translate(-50%, -50%)",
-            width: 500,
-            border: "2px solid #000",
-            bgcolor: "background.paper",
-            boxShadow: 24,
-            pt: 2,
-            px: 4,
-            pb: 3,
-            borderRadius: "1px",
           }}
+          position={"absolute"}
+          top={"50%"}
+          left={"50%"}
+          bgcolor={"background.paper"}
+          width={500}
+          paddingTop={2}
+          paddingX={4}
+          paddingBottom={3}
+          borderRadius={"1px"}
+          boxShadow={24}
+          border={"2px solid #000"}
           textAlign={"center"}
+          component={"form"}
+          onSubmit={page === "login" ? onLogin : onSignup}
         >
           {page === "login" && (
             <>
@@ -67,6 +96,7 @@ const Login: React.FC = () => {
                     </InputAdornment>
                   ),
                 }}
+                name={"username"}
                 required
                 label={"Username"}
                 margin="normal"
@@ -81,13 +111,16 @@ const Login: React.FC = () => {
                   ),
                 }}
                 required
+                name={"password"}
                 label={"Password"}
+                type={"password"}
                 margin="normal"
                 fullWidth
               />
               <FormGroup row>
                 <FormControlLabel
                   label="Remember Me?"
+                  name={"rememberMe"}
                   labelPlacement="start"
                   control={<Checkbox />}
                 />
@@ -104,14 +137,16 @@ const Login: React.FC = () => {
                 &nbsp; Sign Up
               </Link>
               <div>
-                <Button
+                <LoadingButton
+                  type={"submit"}
                   variant="contained"
                   sx={{
                     borderRadius: "5px",
                   }}
+                  loading={loading}
                 >
                   Log in
-                </Button>
+                </LoadingButton>
               </div>
             </>
           )}
@@ -183,21 +218,22 @@ const Login: React.FC = () => {
                 &nbsp; Log in
               </Link>
               <div>
-                <Button
+                <LoadingButton
                   variant="contained"
                   sx={{
                     backgroundColor: "#F792BE",
                     borderRadius: "5px",
                   }}
+                  loading={loading}
                 >
                   Create Account{" "}
-                </Button>
+                </LoadingButton>
               </div>
             </>
           )}
         </Box>
       </Modal>
-    </ThemeProvider>
+    </Container>
   );
 };
 
