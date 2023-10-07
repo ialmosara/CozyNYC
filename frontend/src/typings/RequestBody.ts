@@ -1,4 +1,4 @@
-declare namespace API {
+declare namespace RequestBody {
   type LoginBody = {
     username: string;
     password: string;
@@ -9,5 +9,5 @@ declare namespace API {
     username: string;
     email: string;
     password: string;
-  }
+  };
 }

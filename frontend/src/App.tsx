@@ -2,10 +2,7 @@ import "./App.css";
 import { RouterProvider } from "react-router-dom";
 import { routes } from "./config/routes";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-
-const Fallback = () => {
-  return <p>Performing initial data load </p>;
-};
+import { AuthProvider } from "react-auth-kit";
 
 const App: React.FC = () => {
   const theme = createTheme({
@@ -25,7 +22,14 @@ const App: React.FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <RouterProvider router={routes} fallbackElement={<Fallback />} />
+      <AuthProvider
+        authType={"cookie"}
+        authName={"_auth"}
+        cookieDomain={window.location.hostname}
+        cookieSecure={window.location.protocol === "https"}
+      >
+        <RouterProvider router={routes} />
+      </AuthProvider>
     </ThemeProvider>
   );
 };

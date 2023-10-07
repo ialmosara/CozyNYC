@@ -3,10 +3,12 @@
 ## Description
 
 ## Dependencies used:
+
 1. MaterialUI
 2. react-router
 
 ## How to use
+
 Download the repo:
 
 ```bash

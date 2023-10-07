@@ -5,22 +5,23 @@ import {
   Checkbox,
   Container,
   FormControlLabel,
-  FormGroup,
   InputAdornment,
   Link,
   Modal,
   TextField,
   Typography,
+  Grid,
 } from "@mui/material";
 import { AccountCircle, Email, Password } from "@mui/icons-material";
-import { ThemeProvider } from "@mui/material/styles";
 import { LoadingButton } from "@mui/lab";
 import { login, signup } from "../service/auth";
+import { useSignIn } from "react-auth-kit";
 
 const Login: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
   const [page, setPage] = useState<"login" | "signup">("login");
   const [loading, setLoading] = useState<boolean>(false);
+  const signIn = useSignIn();
 
   const formSubmitHelper = (e: React.FormEvent<HTMLFormElement>): FormData => {
     setLoading(true);
@@ -31,17 +32,24 @@ const Login: React.FC = () => {
   const onLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       const data = formSubmitHelper(e);
-      const reqBody: API.LoginBody = {
+      const reqBody: RequestBody.LoginBody = {
         username: data.get("username") as string,
         password: data.get("password") as string,
         rememberMe: !!data.get("rememberMe"),
       };
       console.log("pre api call");
-      const test = await login(reqBody);
-      console.log("test", test);
-      console.log("successful api call");
+      const response = await login(reqBody);
+      signIn({
+        token: response.token,
+        expiresIn: 3600,
+        tokenType: "Bearer",
+        authState: {
+          username: reqBody.username,
+        },
+      });
+      console.log("successful api call", response);
     } catch (e) {
-      console.log("failed api call");
+      console.log("failed api call", e);
     }
     setLoading(false);
   };
@@ -49,7 +57,7 @@ const Login: React.FC = () => {
   const onSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       const data = formSubmitHelper(e);
-      const reqBody: API.SignUpBody = {
+      const reqBody: RequestBody.SignUpBody = {
         username: data.get("username") as string,
         email: data.get("email") as string,
         password: data.get("password") as string,
@@ -63,7 +71,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <Container>
+    <Grid container>
       <Button onClick={() => setOpenModal(true)}> Log in </Button>
       <Modal open={openModal} onClose={() => setOpenModal(false)}>
         <Box
@@ -88,43 +96,65 @@ const Login: React.FC = () => {
           {page === "login" && (
             <>
               <Typography variant={"h4"}>Login</Typography>
-              <TextField
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <AccountCircle />
-                    </InputAdornment>
-                  ),
-                }}
-                name={"username"}
-                required
-                label={"Username"}
-                margin="normal"
-                fullWidth
-              />
-              <TextField
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Password />
-                    </InputAdornment>
-                  ),
-                }}
-                required
-                name={"password"}
-                label={"Password"}
-                type={"password"}
-                margin="normal"
-                fullWidth
-              />
-              <FormGroup row>
-                <FormControlLabel
-                  label="Remember Me?"
-                  name={"rememberMe"}
-                  labelPlacement="start"
-                  control={<Checkbox />}
-                />
-              </FormGroup>
+              <Grid container>
+                <Grid xs={12}>
+                  <TextField
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <AccountCircle />
+                        </InputAdornment>
+                      ),
+                    }}
+                    name={"username"}
+                    required
+                    label={"Username"}
+                    margin="normal"
+                    fullWidth
+                  />
+                </Grid>
+              </Grid>
+              <Grid container>
+                <Grid xs={12}>
+                  <TextField
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Password />
+                        </InputAdornment>
+                      ),
+                    }}
+                    required
+                    name={"password"}
+                    label={"Password"}
+                    type={"password"}
+                    margin="normal"
+                    fullWidth
+                  />
+                </Grid>
+              </Grid>
+              <Grid container>
+                <Grid xs={6}>
+                  <FormControlLabel
+                    label="Remember Me?"
+                    name={"rememberMe"}
+                    labelPlacement="start"
+                    control={<Checkbox />}
+                  />
+                </Grid>
+                <Grid xs={6}>
+                  <LoadingButton
+                    type={"submit"}
+                    variant="contained"
+                    sx={{
+                      borderRadius: "5px",
+                    }}
+                    loading={loading}
+                  >
+                    Log in
+                  </LoadingButton>
+                </Grid>
+              </Grid>
               <Typography display={"inline"} align="center">
                 Don't have an account?
               </Typography>
@@ -136,18 +166,7 @@ const Login: React.FC = () => {
               >
                 &nbsp; Sign Up
               </Link>
-              <div>
-                <LoadingButton
-                  type={"submit"}
-                  variant="contained"
-                  sx={{
-                    borderRadius: "5px",
-                  }}
-                  loading={loading}
-                >
-                  Log in
-                </LoadingButton>
-              </div>
+              <div></div>
             </>
           )}
           {page === "signup" && (
@@ -164,6 +183,7 @@ const Login: React.FC = () => {
                 required
                 label={"Username"}
                 margin="normal"
+                name="username"
                 fullWidth
               />
               <TextField
@@ -176,6 +196,7 @@ const Login: React.FC = () => {
                     </InputAdornment>
                   ),
                 }}
+                name="email"
                 margin="normal"
                 fullWidth
               />
@@ -189,6 +210,8 @@ const Login: React.FC = () => {
                 }}
                 required
                 label={"Password"}
+                type="password"
+                name="password"
                 margin="normal"
                 fullWidth
               />
@@ -204,6 +227,7 @@ const Login: React.FC = () => {
                 required
                 label={"Retype Password"}
                 margin="normal"
+                type="password"
                 fullWidth
               />
               <Typography display={"inline"}>
@@ -217,23 +241,24 @@ const Login: React.FC = () => {
               >
                 &nbsp; Log in
               </Link>
-              <div>
+              <Container>
                 <LoadingButton
                   variant="contained"
                   sx={{
                     backgroundColor: "#F792BE",
                     borderRadius: "5px",
                   }}
+                  type={"submit"}
                   loading={loading}
                 >
                   Create Account{" "}
                 </LoadingButton>
-              </div>
+              </Container>
             </>
           )}
         </Box>
       </Modal>
-    </Container>
+    </Grid>
   );
 };
 

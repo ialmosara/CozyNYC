@@ -1,9 +1,9 @@
 import { axiosWrapper } from "../common/axiosWrapper";
 
-export const login = async (data: API.LoginBody) => {
-    return await axiosWrapper.post('/login', data);
+export const login = async (data: RequestBody.LoginBody) => {
+    return await axiosWrapper.post<RequestBody.LoginBody, API.LoginResponse>('/login', data);
 };
 
-export const signup = async (data: API.SignUpBody) => {
+export const signup = async (data: RequestBody.SignUpBody) => {
     return await axiosWrapper.post('signup', data);
 }
