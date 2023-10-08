@@ -96,43 +96,35 @@ const Login: React.FC = () => {
           {page === "login" && (
             <>
               <Typography variant={"h4"}>Login</Typography>
-              <Grid container>
-                <Grid xs={12}>
-                  <TextField
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <AccountCircle />
-                        </InputAdornment>
-                      ),
-                    }}
-                    name={"username"}
-                    required
-                    label={"Username"}
-                    margin="normal"
-                    fullWidth
-                  />
-                </Grid>
-              </Grid>
-              <Grid container>
-                <Grid xs={12}>
-                  <TextField
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <Password />
-                        </InputAdornment>
-                      ),
-                    }}
-                    required
-                    name={"password"}
-                    label={"Password"}
-                    type={"password"}
-                    margin="normal"
-                    fullWidth
-                  />
-                </Grid>
-              </Grid>
+              <TextField
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <AccountCircle />
+                    </InputAdornment>
+                  ),
+                }}
+                name={"username"}
+                required
+                label={"Username"}
+                margin="normal"
+                fullWidth
+              />
+              <TextField
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Password />
+                    </InputAdornment>
+                  ),
+                }}
+                required
+                name={"password"}
+                label={"Password"}
+                type={"password"}
+                margin="normal"
+                fullWidth
+              />
               <Grid container>
                 <Grid xs={6}>
                   <FormControlLabel
@@ -166,7 +158,6 @@ const Login: React.FC = () => {
               >
                 &nbsp; Sign Up
               </Link>
-              <div></div>
             </>
           )}
           {page === "signup" && (
