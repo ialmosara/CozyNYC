@@ -5,10 +5,8 @@ import (
 	"cozy-backend/internal/db"
 	"os"
 
-
 	"github.com/gin-gonic/gin"
 )
-
 
 type DBConfig struct {
 	Host     string
@@ -27,18 +25,6 @@ func getDBConfig() *DBConfig {
 		Name:     os.Getenv("DB_NAME"),
 	}
 }
-
-func SetupRoutes(r *gin.Engine) {
-	config := getDBConfig()
-	pgDB := db.NewGormPostgresDB(config.Host, config.Port, config.User, config.Password, config.Name)
-
-	// Authentication routes
-	r.POST("/signup", handlers.Register(pgDB))
-	r.POST("/login", handlers.Login(pgDB))
-
-	// Other routes
-
-//Env file for the password
 
 func SetupRoutes(r *gin.Engine) {
 
