@@ -1,5 +1,5 @@
 const Signup: React.FC = () => {
-return (<>Log in page</>)
+return (<>Signup page</>)
 }
 
 export default Signup;
